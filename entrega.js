@@ -5,7 +5,7 @@ class ticketManager {
 
     constructor(precioBaseDeGanancia) {
         this.#precioBaseDeGanancia = precioBaseDeGanancia;
-        this.eventos = []; /* Array para guardar eventos
+        this.eventos = []; /* Array para guardar eventos*/
         this.#contadorIdEventos = 0; /* Inicializa el contador de eventos en 0 */
         this.#contadorIdUsuario = 0; /* Inicializa el contador de usuarios en 0 */
     }
