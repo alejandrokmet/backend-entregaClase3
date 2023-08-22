@@ -1,63 +1,55 @@
-class ticketManager {
-    #precioBaseDeGanancia; /* Variable privada para añadir el coste adicional */
-    #contadorIdEventos; /* Variable privada para guardar el idEvento */
-    #contadorIdUsuario; /* Variable privada para guardar el contador */
-
-    constructor(precioBaseDeGanancia) {
-        this.#precioBaseDeGanancia = precioBaseDeGanancia;
-        this.eventos = []; /* Array para guardar eventos*/
-        this.#contadorIdEventos = 0; /* Inicializa el contador de eventos en 0 */
-        this.#contadorIdUsuario = 0; /* Inicializa el contador de usuarios en 0 */
+class ProductManager {
+    constructor() {
+        this.products = [];
     }
 
-    agregarEvento(nombre, lugar, precio, capacidad, fecha) {
-        const precioEvento = precio * 0.15; /* Agrega 15% al valor original del precio */
+    getNextId() {
+        // Encuentra el ID máximo de los existentes y crea el id próximo
+        const maxId = this.products.reduce((max, product) => (product.id > max ? product.id : max), 0);
+        return maxId + 1;
+    }
 
-        const evento = {
-            idEvento: this.#contadorIdEventos,
-            nombre,
-            lugar,
-            precio: precioEvento,
-            capacidad,
-            fecha,
-            participantes: [] /* Array vacio para guardar participantes */
+    addProduct(productData) {
+
+        const isCodeRepeated = this.products.some(product => product.code === productData.code);
+
+        if (isCodeRepeated) {
+            throw new Error('The product code already exists');
+        }
+
+        // Verifica si alguno de los campos está vacío.
+        if (!title || !description || !price || !thumbnail || !code || !stock) {
+            throw new Error('All product fields are mandatory.');
+        }
+
+        // Crea un nuevo producto con el id auto incrementado
+        const newProduct = {
+            id: this.getNextId(),
+            title: productData.title,
+            description: productData.description,
+            price: productData.price,
+            thumbnail: productData.thumbnail,
+            code: productData.code,
+            stock: productData.stock,
         };
 
-        this.#contadorIdEventos++; /* Incrementa el id del contador del evento */
-
-        this.eventos.push(evento);
+        // Agrega el nuevo producto al array de productos
+        this.products.push(newProduct);
     }
+    getProducts() {
+        // Devuelve todos los productos como un array
+        return this.products;
+    }
+    getProductById(productId) {
+        // Encuentra y devuelve el producto con el id especificado
+        const product = this.products.find((product) => product.id === productId);
 
-    agregarUsuario(idEvento, idUsuario) {
-        const evento = this.eventos.find(evento => evento.id === idEvento);
-        if (evento) {
-            evento.participantes.push(idUsuario);
-            this.#contadorIdUsuario++; /* Incrementa el contador de id de usuario */
-        } else {
-            console.log(`El evento con el ID ${idEvento} no existe.`);
+        if (!productId) {
+            throw new Error('Product not found.');
         }
+
+        return product;
     }
 
-    ponerEventoEnGira(idEvento, lugar, fecha) {
-        const eventoACopiar = this.eventos.find(evento => evento.id === idEvento);
-        if (eventoACopiar) {
-            const eventoCopiado = {
-                ...eventoACopiar,
-                id: this.#contadorIdEventos,
-                lugar,
-                fecha,
-                participantes: []
-            };
 
-            this.#contadorIdEventos++;
-
-            this.eventos.push(eventoCopiado);
-        } else {
-            console.log(`El evento con el id ${idEvento} no existe.`);
-        }
-    }
-
-    conseguirEventos() {
-        return this.eventos;
-    }
 }
